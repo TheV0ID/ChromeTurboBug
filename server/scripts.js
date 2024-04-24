@@ -1,18 +1,16 @@
 (() => {
-  // common.js
+  // app/submit-on-event.js
+  function submit_on_event_default(container, selector) {
+    container.querySelectorAll(selector).forEach(function(match) {
+      once(match, "submit-on-event", init);
+    });
+  }
   function once(el, label, fn) {
     const attr = "data-" + label + "-initialized";
     if (!el.hasAttribute(attr)) {
       el.setAttribute(attr, "true");
       fn(el);
     }
-  }
-
-  // submit-on-event.js
-  function submit_on_event_default(container, selector) {
-    container.querySelectorAll(selector).forEach(function(match) {
-      once(match, "submit-on-event", init);
-    });
   }
   function init(el) {
     if (el.classList.contains("submit-on-enter")) {
@@ -25,12 +23,12 @@
       });
     }
     if (el.classList.contains("submit-on-change")) {
-      el.addEventListener("change", function() {
+      el.addEventListener("change", function(event) {
         submitIfValid(this.form);
       });
     }
     if (el.classList.contains("submit-on-blur")) {
-      el.addEventListener("blur", function() {
+      el.addEventListener("blur", function(event) {
         submitIfValid(this.form);
       });
     }
@@ -3842,7 +3840,7 @@
   window.Turbo = Turbo;
   start();
 
-  // app.js
+  // app/app.js
   session.drive = false;
   function initialize(container) {
     submit_on_event_default(container, ".submit-on-enter");

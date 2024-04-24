@@ -1,9 +1,15 @@
-import {once} from './common'
-
 export default function (container, selector) {
     container.querySelectorAll(selector).forEach(function (match) {
         once(match, 'submit-on-event', init);
     });
+}
+
+function once(el, label, fn) {
+    const attr = "data-" + label + "-initialized";
+    if (!el.hasAttribute(attr)) {
+        el.setAttribute(attr, "true");
+        fn(el);
+    }
 }
 
 function init(el) {
@@ -17,12 +23,12 @@ function init(el) {
         });
     }
     if (el.classList.contains("submit-on-change")) {
-        el.addEventListener('change', function () {
+        el.addEventListener('change', function (event) {
             submitIfValid(this.form);
         });
     }
     if (el.classList.contains("submit-on-blur")) {
-        el.addEventListener('blur', function () {
+        el.addEventListener('blur', function (event) {
             submitIfValid(this.form);
         });
     }
